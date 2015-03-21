@@ -1,7 +1,10 @@
 local event = require("src/events")
 local ships = require("src/spaceship")
+require("src/map")
+require("src/camera")
 
 function love.load()
+	map = createMap()
 	ships.init(event)
 	-- TODO: remove dummies
 	event.push("CreateShip", {id = 1, x = 100, y = 100})
@@ -18,6 +21,7 @@ function love.update(dt)
 end
 
 function love.draw()
+	map.draw()
 	ships.draw()
 end
 
@@ -31,10 +35,6 @@ end
 
 function love.mousereleased(x, y, button)
   
-end
-
-function love.keypressed(key)
-
 end
 
 function love.keyreleased(key)
