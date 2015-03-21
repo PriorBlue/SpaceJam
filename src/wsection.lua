@@ -1,9 +1,10 @@
 -- wsection
 -- this is a square on the world map and has a game map attatched to it
 wsection = {}
+wsection.maxTextureIndex = 1
 function wsection.new(gameMap, visuals)
 	local s = {}
-	s.visuals = visuals or 1 -- index for the texture of this world section
+	s.visuals = visuals or 0 -- index for the texture of this world section
 	s.map = gameMap
 
 	function s.draw(posX,posY)
