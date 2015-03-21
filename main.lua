@@ -6,6 +6,7 @@ require("src/camera")
 
 function love.load()
 	map = createMap()
+	map.randomiseBodies()
 	network.init(event)
 	ships.init(event)
 	-- TODO: remove dummies
@@ -28,9 +29,11 @@ function love.update(dt)
 		camera.y = camera.y + 200 * dt
 	end
 	map.update(dt)
+	camera:update(dt)
 	ships.updateInput()
 	network.update(dt)
 	ships.update(dt)
+	camera.target = ships.ships[1]
 	
 	-- clear events
 	event.clearAll()
