@@ -14,6 +14,7 @@ function createMap()
 			love.window.getWidth(),
 			love.window.getHeight())
 		love.graphics.draw(map.bg.img, map.bg.quad, 0, 0)
+		camera.draw()
 	end
 	map.scale = {x = 1, y = 1}
 

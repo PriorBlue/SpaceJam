@@ -1,5 +1,5 @@
-require("map")
-require("camera")
+require("src/map")
+require("src/camera")
 
 function love.load()
 	map = createMap()
