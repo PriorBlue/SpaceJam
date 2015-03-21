@@ -1,10 +1,12 @@
 local event = require("src/events")
 local ships = require("src/spaceship")
+local network = require("src/network")
 require("src/map")
 require("src/camera")
 
 function love.load()
 	map = createMap()
+	network.init(event)
 	ships.init(event)
 	-- TODO: remove dummies
 	event.push("CreateShip", {id = 1, x = 100, y = 100})
@@ -14,6 +16,7 @@ end
 
 function love.update(dt)
 	ships.updateInput()
+	network.update(dt)
 	ships.update(dt)
 	
 	-- clear events
