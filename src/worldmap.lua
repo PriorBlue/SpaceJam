@@ -17,8 +17,8 @@ function worldmap.init(len, wid) -- can also be used for a reset
 	for i=0,w.width-1 do
 		w.map[i] = {}
 		for j=0,w.length-1 do
-			local gameMap = nil -- TODO replace nil with new game map
-			local visual = nil -- TODO replace nil with a random integer value, see 
+			local gameMap = createMap()
+			local visual = love.math.random(wsection.maxTextureIndex) -- see wsection.lua for more details
 			w.map[i][j] = wsection.new(gameMap,visual)
 		end
 	end
