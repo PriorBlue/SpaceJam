@@ -1,4 +1,4 @@
-require("camera")
+require("src/camera")
 
 function createMap()
 	local bg = love.graphics.newImage("backgrounds/background_stars.png")
