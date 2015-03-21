@@ -28,15 +28,16 @@ function createMap()
 			body:update(dt)
 		end
 	end
-
-	math.randomseed(117)
-	for x=-10,10 do
-		for y=-10,10 do
-			local ranOffsetX = math.random(-100, 100)
-			local ranOffsetY = math.random(-100, 100)
-			local ranScale = math.random(1, 3)
-			local ranRotationRate = math.random(-2, 2)
-			table.insert(map.celestialBodys, createBody("sprites/ufo.png", x * 1000 + ranOffsetX, y * 1000 + ranOffsetY, ranScale, ranRotationRate))
+	map.randomiseBodies = function()
+		math.randomseed(117)
+		for x=-10,10 do
+			for y=-10,10 do
+				local ranOffsetX = math.random(-100, 100)
+				local ranOffsetY = math.random(-100, 100)
+				local ranScale = math.random(1, 3)
+				local ranRotationRate = math.random(-2, 2)
+				table.insert(map.celestialBodys, createBody("sprites/ufo.png", x * 1000 + ranOffsetX, y * 1000 + ranOffsetY, ranScale, ranRotationRate))
+			end
 		end
 	end
 
