@@ -1,9 +1,19 @@
+local event = require("src/events")
+
 function love.load()
 
 end
 
 function love.update(dt)
+	event.push("ShootFire", {x = 16, y = 32})
 
+	bullets = event.pull("ShootFire")
+	
+	for k, b in pairs(bullets) do
+		print(b.x)
+	end
+	
+	event.clearAll()
 end
 
 function love.draw()
