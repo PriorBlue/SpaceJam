@@ -6,23 +6,11 @@ function love.load()
 end
 
 function love.update(dt)
-	if love.keyboard.isDown("up") then
-		camera.y = camera.y + 300 * dt
-	end
-	if love.keyboard.isDown("down") then
-		camera.y = camera.y - 300 * dt
-	end
-	if love.keyboard.isDown("left") then
-		camera.x = camera.x + 300 * dt
-	end
-	if love.keyboard.isDown("right") then
-		camera.x = camera.x - 300 * dt
-	end
+
 end
 
 function love.draw()
     map.draw()
-    camera.draw()
 end
 
 function resetGame()
