@@ -47,7 +47,29 @@ NetworkManager.update = function(dt)
 				data.msg.y = e.y
 				data.msg.d = e.d
 				data.msg.s = e.s
+				data.msg.ds = e.ds
+				data.msg.ss = e.ss
+				data.msg.sd = e.sd
+				data.msg.dd = e.dd
+				data.msg.smin = e.smin
+				data.msg.smax = e.smax
 
+				NetworkManager.udp:send(TSerial.pack(data))
+			end
+		end
+	end
+	
+	-- Shoot
+	local events = NetworkManager.events.pull("Shoot")
+
+	if NetworkManager.playerId ~= 0 and events then
+		for i, e in pairs(events) do
+			if e.id == NetworkManager.playerId then
+				local data = {}
+				data.id = "Shoot"
+				data.msg = {}
+				data.msg.id = NetworkManager.playerId
+				
 				NetworkManager.udp:send(TSerial.pack(data))
 			end
 		end
