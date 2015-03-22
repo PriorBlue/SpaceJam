@@ -6,16 +6,17 @@ NetworkManager.playerId = 0;
 NetworkManager.events = nil
 NetworkManager.player = {}
 
+NetworkManager.udp = socket.udp()
+NetworkManager.udp:settimeout(0)
+
 NetworkManager.init = function(events)
-	udp = socket.udp()
-	udp:settimeout(0)
-	udp:setpeername(settings.loaded.ip, settings.loaded.port)
+	NetworkManager.udp:setpeername(settings.loaded.ip, settings.loaded.port)
 	NetworkManager.events = events
-	udp:send(TSerial.pack({id = "Login"}))
+	NetworkManager.udp:send(TSerial.pack({id = "Login"}))
 end
 
 NetworkManager.update = function(dt)
-	local data = udp:receive()
+	local data = NetworkManager.udp:receive()
 	
 	if data then
 		data = TSerial.unpack(data)
@@ -47,14 +48,14 @@ NetworkManager.update = function(dt)
 				data.msg.d = e.d
 				data.msg.s = e.s
 
-				udp:send(TSerial.pack(data))
+				NetworkManager.udp:send(TSerial.pack(data))
 			end
 		end
 	end
 end
 
 NetworkManager.quit = function()
-	udp:send(TSerial.pack({id = "Logout", msg = {id = NetworkManager.playerId}}))
+	NetworkManager.udp:send(TSerial.pack({id = "Logout", msg = {id = NetworkManager.playerId}}))
 end
 
 return NetworkManager

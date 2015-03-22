@@ -67,24 +67,28 @@ function love.update(dt)
 				print("Logout: " .. ip .. ":" .. port)
 				
 				for i, p2 in pairs(player) do
-					local data3 = {}
-					data3.id = "DestroyShip"
-					data3.msg = {}
-					data3.msg.id = player[ip .. "|" .. port].id
-					
-					udp:sendto(Tserial.pack(data3), p2.ip,  p2.port)
+					if player[ip .. "|" .. port] then
+						local data3 = {}
+						data3.id = "DestroyShip"
+						data3.msg = {}
+						data3.msg.id = player[ip .. "|" .. port].id
+						
+						udp:sendto(Tserial.pack(data3), p2.ip,  p2.port)
+					end
 				end
 				
 				player[ip .. "|" .. port] = nil
 			else
-				--print(data)
-				player[ip .. "|" .. port].x = data2.msg.x or player[ip .. "|" .. port].x
-				player[ip .. "|" .. port].y = data2.msg.y or player[ip .. "|" .. port].y
-				player[ip .. "|" .. port].d = data2.msg.d or player[ip .. "|" .. port].d
-				player[ip .. "|" .. port].s = data2.msg.s or player[ip .. "|" .. port].s
-				for i, p in pairs(player) do
-					if player[ip .. "|" .. port].id ~= p.id then
-						udp:sendto(data, p.ip,  p.port)
+				if player[ip .. "|" .. port] then
+					--print(data)
+					player[ip .. "|" .. port].x = data2.msg.x or player[ip .. "|" .. port].x
+					player[ip .. "|" .. port].y = data2.msg.y or player[ip .. "|" .. port].y
+					player[ip .. "|" .. port].d = data2.msg.d or player[ip .. "|" .. port].d
+					player[ip .. "|" .. port].s = data2.msg.s or player[ip .. "|" .. port].s
+					for i, p in pairs(player) do
+						if player[ip .. "|" .. port].id ~= p.id then
+							udp:sendto(data, p.ip,  p.port)
+						end
 					end
 				end
 			end
@@ -96,7 +100,8 @@ function love.draw()
 	if player then
 		love.graphics.setColor(0, 255, 0)
 		for i, p in pairs(player) do
-			love.graphics.rectangle("fill", p.x * 0.1 - 2, p.y * 0.1 - 2, 4, 4)
+			--love.graphics.rectangle("fill", p.x * 0.01 - 2, p.y * 0.01 - 2, 4, 4)
+			love.graphics.print(p.id, p.x * 0.01, p.y * 0.01)
 		end
 	end
 end

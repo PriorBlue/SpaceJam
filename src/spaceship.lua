@@ -140,6 +140,7 @@ function CreateSpaceShip(x, y, id)
 	obj.x = x
 	obj.y = y
 	obj.img = love.graphics.newImage("gfx/ship1.png")
+	obj.img2 = love.graphics.newImage("gfx/miniship1.png")
 	obj.speed = 0
 	obj.speedTrigger = 0
 	obj.speedMax = 200
@@ -175,8 +176,12 @@ function CreateSpaceShip(x, y, id)
 	end
 	
 	obj.drawMarker = function(i)
-		love.graphics.setColor(0, 255, 0, 127)
-		love.graphics.rectangle("fill", love.graphics.getWidth()-256 + math.min(256, (math.max(0, obj.x * 0.01))) - 3, math.min(256, (math.max(0, obj.y * 0.01))) - 3, 5, 5)
+		if obj.id == ShipManager.shipId then
+			love.graphics.setColor(255, 255, 255, 127)
+		else
+			love.graphics.setColor(0, 255, 0, 127)
+		end
+		love.graphics.draw(obj.img2, love.graphics.getWidth()-256 + math.min(256, (math.max(0, obj.x * 0.01))), math.min(256, (math.max(0, obj.y * 0.01))), obj.direction, 1, 1, 5, 5)
 	end
 	
 	return obj
