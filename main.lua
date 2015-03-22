@@ -1,6 +1,7 @@
 require("src/Tserial")
 settings = require("src/settings")
-local event = require("src/events")
+audio = require("src/audio")
+event = require("src/events")
 local ships = require("src/spaceship")
 local network = require("src/network")
 local worldmap = require("src/worldmap")
@@ -21,6 +22,7 @@ function love.load(args)
 	map.randomiseBodies()
 	network.init(event)
 	ships.init(event)
+	audio.init()
 	world = worldmap.init()
 end
 
@@ -42,6 +44,7 @@ function love.update(dt)
 	--ships.updateInput()	
 	network.update(dt)
 	ships.update(dt)
+	audio.update()
 	
 	if ships.shipId ~= 0 then
 		camera.target = ships.ships[ships.shipId]
