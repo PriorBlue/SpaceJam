@@ -27,7 +27,7 @@ function love.update(dt)
 	end
 	map.update(dt)
 	camera:update(dt)
-	ships.updateInput()
+	--ships.updateInput()	
 	network.update(dt)
 	ships.update(dt)
 	camera.target = ships.ships[1]

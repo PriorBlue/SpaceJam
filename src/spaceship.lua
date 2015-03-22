@@ -9,32 +9,34 @@ ShipManager.init = function(events)
 end
 
 ShipManager.keyreleased = function(key)
+	local scode = love.keyboard.getScancodeFromKey(key)
 	if ShipManager.shipId ~= 0 then
-		if key == "w" then
+		if scode == "w" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedStop", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
-		elseif key == "s" then
+		elseif scode == "s" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedStop", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
 		end
 		
-		if key == "a" then
+		if scode == "a" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateStop", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
-		elseif key == "d" then
+		elseif scode == "d" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateStop", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
 		end
 	end
 end
 
 ShipManager.keypressed = function(key)
+	local scode = love.keyboard.getScancodeFromKey(key)
 	if ShipManager.shipId ~= 0 then
-		if key == "w" then
+		if scode == "w" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedUp", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
-		elseif key == "s" then
+		elseif scode == "s" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedDown", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
 		end
 		
-		if key == "a" then
+		if scode == "a" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateLeft", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
-		elseif key == "d" then
+		elseif scode == "d" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateRight", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
 		end
 	end
