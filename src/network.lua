@@ -1,9 +1,5 @@
 local socket = require("socket")
 
-udp = socket.udp()
-udp:settimeout(0)
-udp:setpeername("192.168.2.103", 1337)
-
 local NetworkManager = {}
 NetworkManager.playerId = 0;
 
@@ -11,6 +7,9 @@ NetworkManager.events = nil
 NetworkManager.player = {}
 
 NetworkManager.init = function(events)
+	udp = socket.udp()
+	udp:settimeout(0)
+	udp:setpeername(settings.loaded.ip, settings.loaded.port)
 	NetworkManager.events = events
 	udp:send(TSerial.pack({id = "Login"}))
 end

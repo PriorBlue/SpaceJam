@@ -1,4 +1,5 @@
-require("src/TSerial")
+require("src/Tserial")
+settings = require("src/settings")
 local event = require("src/events")
 local ships = require("src/spaceship")
 local network = require("src/network")
@@ -6,7 +7,16 @@ local worldmap = require("src/worldmap")
 require("src/map")
 require("src/camera")
 
-function love.load()
+function love.load(args)
+	settings.init()
+	if args ~= nil then
+		for  k,v in pairs(args) do
+			if v == "." then
+			elseif string.sub(string.lower(v),1,string.len("-ip="))=="-ip=" then
+				settings.loaded.ip = string.sub(v,string.len("-ip="))
+			end
+		end
+	end
 	map = createMap()
 	map.randomiseBodies()
 	network.init(event)
