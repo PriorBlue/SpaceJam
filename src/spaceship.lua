@@ -253,8 +253,6 @@ function CreateSpaceShip(x, y, id, kind)
 			else
 				obj.rotationTrigger = 1
 			end
-
-			print(angleToTarget , angle)
 		end
 		if obj.speedTrigger == 1 then
 			obj.speed = obj.speed + obj.boostSpeed * dt
