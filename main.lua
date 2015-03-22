@@ -20,7 +20,7 @@ function love.load(args)
 	end
 	settings.loaded.port = 1337
 	map = createMap()
-	--map.randomiseBodies()
+	map.randomiseBodies()
 	network.init(event)
 	ships.init(event)
 	audio.init()
