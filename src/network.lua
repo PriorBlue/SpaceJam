@@ -46,6 +46,7 @@ NetworkManager.update = function(dt)
 				data.msg.x = e.x
 				data.msg.y = e.y
 				data.msg.d = e.d
+				data.msg.s = e.s
 
 				udp:send(TSerial.pack(data))
 			end
@@ -54,7 +55,7 @@ NetworkManager.update = function(dt)
 end
 
 NetworkManager.quit = function()
-	udp:send(TSerial.pack({id = "Logout"}))
+	udp:send(TSerial.pack({id = "Logout", msg = {id = NetworkManager.playerId}}))
 end
 
 return NetworkManager

@@ -10,32 +10,36 @@ end
 
 ShipManager.keyreleased = function(key)
 	if ShipManager.shipId ~= 0 then
+		local ship = ShipManager.ships[ShipManager.shipId]
+
 		if key == "w" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedStop", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
+			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedStop", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
 		elseif key == "s" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedStop", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
+			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedStop", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
 		end
 		
 		if key == "a" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateStop", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
+			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateStop", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
 		elseif key == "d" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateStop", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
+			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateStop", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
 		end
 	end
 end
 
 ShipManager.keypressed = function(key)
 	if ShipManager.shipId ~= 0 then
+		local ship = ShipManager.ships[ShipManager.shipId]
+		
 		if key == "w" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedUp", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
+			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedUp", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
 		elseif key == "s" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedDown", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
+			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedDown", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
 		end
 		
 		if key == "a" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateLeft", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
+			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateLeft", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
 		elseif key == "d" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateRight", x = ShipManager.ships[ShipManager.shipId].x, y = ShipManager.ships[ShipManager.shipId].y, d = ShipManager.ships[ShipManager.shipId].direction})
+			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateRight", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
 		end
 	end
 end
@@ -48,6 +52,16 @@ ShipManager.update = function(dt)
 		for i, e in pairs(events) do
 			print("create",e.x, e.y)
 			ShipManager.ships[e.id] = CreateSpaceShip(e.x, e.y, e.id)
+		end
+	end
+	
+	-- Destroy Ship
+	local events = ShipManager.events.pull("DestroyShip")
+
+	if events then
+		for i, e in pairs(events) do
+			print("destroy",e.id)
+			ShipManager.ships[e.id] = nil
 		end
 	end
 	
@@ -68,7 +82,8 @@ ShipManager.update = function(dt)
 			local obj = ShipManager.ships[e.id]
 			obj.x = e.x
 			obj.y = e.y
-			obj.d = e.d
+			obj.direction = e.d
+			obj.speed = e.s
 			if obj then
 				if e.action == "speedUp" then
 					obj.speedTrigger = 1
@@ -100,7 +115,7 @@ end
 ShipManager.draw = function()
 	if ShipManager.ships then
 		for i, s in pairs(ShipManager.ships) do
-			s.draw()
+			s.draw(i)
 		end
 	end
 end
@@ -141,8 +156,9 @@ function CreateSpaceShip(x, y, id)
 		obj.y = obj.y - math.cos(obj.direction) * dt * obj.speed
 	end
 
-	obj.draw = function()
+	obj.draw = function(i)
 		love.graphics.draw(obj.img, obj.x, obj.y, obj.direction, 1, 1, 16, 16)
+		--love.graphics.print(i, obj.x, obj.y)
 	end
 	
 	return obj

@@ -19,10 +19,15 @@ function love.update(dt)
 
 		if data2 then
 			if data2.id == "Login" then
+				print("Login: " .. ip .. ":" .. port)
 				local p = {}
 				p.id = playerId
 				p.ip = ip
 				p.port = port
+				p.x = 0
+				p.y = 0
+				p.d = 0
+				p.s = 0
 				
 				playerId = playerId + 1
 				
@@ -40,6 +45,7 @@ function love.update(dt)
 					data.msg.x = x
 					data.msg.y = y
 					data.msg.d = d
+					data.msg.s = s
 					
 					udp:sendto(Tserial.pack(data), p2.ip,  p2.port)
 					
@@ -54,16 +60,31 @@ function love.update(dt)
 					
 					-- send return to player
 					if p.id ~= p2.id then
-						udp:sendto(Tserial.pack({id="CreateShip",msg={id=p2.id,x=x,y=y,d=d}}), ip, port)
+						udp:sendto(Tserial.pack({id="CreateShip",msg={id=p2.id,x=p2.x or 0,y=p2.y or 0,d=p2.d or 0,s=p2.s or 0}}), ip, port)
 					end
 				end
+			elseif data2.id == "Logout" then
+				print("Logout: " .. ip .. ":" .. port)
+				
+				for i, p2 in pairs(player) do
+					local data3 = {}
+					data3.id = "DestroyShip"
+					data3.msg = {}
+					data3.msg.id = player[ip .. "|" .. port].id
+					
+					udp:sendto(Tserial.pack(data3), p2.ip,  p2.port)
+				end
+				
+				player[ip .. "|" .. port] = nil
 			else
-				print(data)
+				--print(data)
+				player[ip .. "|" .. port].x = data2.msg.x or player[ip .. "|" .. port].x
+				player[ip .. "|" .. port].y = data2.msg.y or player[ip .. "|" .. port].y
+				player[ip .. "|" .. port].d = data2.msg.d or player[ip .. "|" .. port].d
+				player[ip .. "|" .. port].s = data2.msg.s or player[ip .. "|" .. port].s
 				for i, p in pairs(player) do
 					if player[ip .. "|" .. port].id ~= p.id then
 						udp:sendto(data, p.ip,  p.port)
-					else
-						print("self")
 					end
 				end
 			end
@@ -72,7 +93,12 @@ function love.update(dt)
 end
 
 function love.draw()
-
+	if player then
+		love.graphics.setColor(0, 255, 0)
+		for i, p in pairs(player) do
+			love.graphics.rectangle("fill", p.x * 0.1 - 2, p.y * 0.1 - 2, 4, 4)
+		end
+	end
 end
 
 function love.mousepressed(x, y, button)

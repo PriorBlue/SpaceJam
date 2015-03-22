@@ -24,6 +24,10 @@ function love.draw()
 	ships.draw()
 end
 
+function love.quit()
+	network.quit()
+end
+
 function resetGame()
 
 end
