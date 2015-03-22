@@ -53,7 +53,7 @@ ShipManager.update = function(dt)
 	if events then
 		for i, e in pairs(events) do
 			print("create",e.x, e.y)
-			ShipManager.ships[e.id] = CreateSpaceShip(e.x, e.y, e.id)
+			ShipManager.ships[e.id] = CreateSpaceShip(e.x, e.y, e.id, e.type)
 		end
 	end
 	
@@ -133,24 +133,67 @@ ShipManager.drawMarker = function()
 	love.graphics.setColor(255, 255, 255)
 end
 
-function CreateSpaceShip(x, y, id)
+function CreateSpaceShip(x, y, id, kind)
 	local obj = {}
-
 	obj.id = id
 	obj.x = x
 	obj.y = y
-	obj.img = love.graphics.newImage("gfx/ship1.png")
-	obj.img2 = love.graphics.newImage("gfx/miniship1.png")
-	obj.speed = 0
-	obj.speedTrigger = 0
-	obj.speedMax = 200
-	obj.speedMin = -100
-	obj.boostSpeed = 100
 	obj.rotationSpeed = 2
 	obj.rotationTrigger = 0
 	obj.direction = 0
+	obj.speed = 0
+	obj.speedTrigger = 0
+
+	if kind == nil or kind == "" or kind == "figther" then 
+		obj.kind = "figther"
+		obj.img = love.graphics.newImage("sprites/fighter_color.png")
+		obj.img2 = love.graphics.newImage("sprites/miniship1.png")
+		obj.speedMax = 200
+		obj.speedMin = -100
+		obj.boostSpeed = 100
+		obj.rotationSpeed = 2
+	elseif kind ~= nil and kind == "mothership" then
+		obj.kind = "mothership"
+		obj.img = love.graphics.newImage("sprites/mothership_body_color.png")
+		obj.img2 = love.graphics.newImage("sprites/miniship1.png")
+		obj.speedMax = 200--10
+		obj.speedMin = -5
+		obj.boostSpeed = 100--25
+		obj.rotationSpeed = 2
+		obj.target = {x = 500, y = 500}
+	else
+		print ("this kind of ship is not supported")
+	end
 
 	obj.update = function(dt)
+		-- override player input if a target is set
+		if obj.target then
+			local angleToTarget = math.atan2(obj.target.y - obj.y, obj.target.x - obj.x)
+			if angleToTarget < 0 then
+				angleToTarget = angleToTarget + (2*math.pi)
+			end
+			if angleToTarget > (2*math.pi) then
+				angleToTarget = angleToTarget - (2*math.pi)
+			end
+			local angle = obj.direction + (1.5 * math.pi)
+			if angle < 0 then
+				angle = angle + (2*math.pi)
+			end
+			if angle > (2*math.pi) then
+				angle = angle - (2*math.pi)
+			end
+			local dist = math.sqrt(math.pow(obj.target.x - obj.x, 2)+math.pow(obj.target.y-obj.y, 2))
+
+			if math.abs(angle - angleToTarget) < .1 then
+				obj.rotationTrigger = 0
+			elseif  angle - angleToTarget < 0 then
+				obj.rotationTrigger = -1
+			else
+				obj.rotationTrigger = 1
+			end
+
+			print(angleToTarget , angle)
+		end
 		if obj.speedTrigger == 1 then
 			obj.speed = obj.speed + obj.boostSpeed * dt
 		elseif obj.speedTrigger == -1 then
@@ -162,16 +205,23 @@ function CreateSpaceShip(x, y, id)
 		elseif obj.rotationTrigger == -1 then
 			obj.direction = obj.direction + obj.rotationSpeed * dt
 		end
-
-		obj.speed = math.max(obj.speedMin, obj.speed)
-		obj.speed = math.min(obj.speedMax, obj.speed)
+		
+		obj.speed = math.max(obj.speedMin or 0, obj.speed)
+		obj.speed = math.min(obj.speedMax or 0, obj.speed)
 		
 		obj.x = obj.x + math.sin(obj.direction) * dt * obj.speed
 		obj.y = obj.y - math.cos(obj.direction) * dt * obj.speed
+
+		if obj.direction < 0 then
+			obj.direction = obj.direction + (2*math.pi)
+		end
+		if obj.direction > (2*math.pi) then
+			obj.direction = obj.direction - (2*math.pi)
+		end
 	end
 
 	obj.draw = function(i)
-		love.graphics.draw(obj.img, obj.x, obj.y, obj.direction, 1, 1, 16, 16)
+		love.graphics.draw(obj.img, obj.x, obj.y, obj.direction, 1, 1, obj.img:getWidth() / 2, obj.img:getHeight() / 2)
 		--love.graphics.print(i, obj.x, obj.y)
 	end
 	

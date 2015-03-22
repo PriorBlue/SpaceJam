@@ -1,3 +1,4 @@
+local cache = require("src/ImgCache")
 local lg = love.graphics
 
 local drawBody = function(self)
@@ -10,7 +11,7 @@ end
 
 function createBody(spritePath, x, y, s, rr)
 	local body = {}
-	body.img = lg.newImage(spritePath)
+	body.img = cache:get(spritePath)
 	body.width = body.img:getWidth()
 	body.height = body.img:getHeight()
 	body.draw = drawBody

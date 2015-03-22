@@ -17,11 +17,14 @@ function love.load(args)
 			end
 		end
 	end
+	settings.loaded.port = 1337
 	map = createMap()
-	map.randomiseBodies()
+	--map.randomiseBodies()
 	network.init(event)
 	ships.init(event)
 	world = worldmap.init()
+	event.push("CreateShip", {id=666, x=0, y=0, type="mothership"})
+	event.push("PlayerId", {id=666})
 end
 
 function love.update(dt)
@@ -83,6 +86,11 @@ function love.keyreleased(key)
 	if key == 'escape' then
 		love.event.quit()
 	end
-	
+	if key == "." then
+		camera.scale = camera.scale * 2
+	end
+	if key == "," then
+		camera.scale = camera.scale / 2
+	end
 	ships.keyreleased(key)
 end

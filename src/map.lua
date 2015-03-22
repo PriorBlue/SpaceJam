@@ -43,7 +43,7 @@ function createMap()
 				local ranOffsetY = math.random(-100, 100)
 				local ranScale = math.random(1, 3)
 				local ranRotationRate = math.random(-2, 2)
-				table.insert(map.celestialBodys, createBody("sprites/ufo.png", x * 1000 + ranOffsetX, y * 1000 + ranOffsetY, ranScale, ranRotationRate))
+				table.insert(map.celestialBodys, createBody("sprites/asteroid_color.png", x * 1000 + ranOffsetX, y * 1000 + ranOffsetY, ranScale, ranRotationRate))
 			end
 		end
 	end
