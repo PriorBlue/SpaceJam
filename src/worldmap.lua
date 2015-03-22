@@ -10,6 +10,7 @@ function worldmap.init(len, wid) -- can also be used for a reset
 	local w = {}
 	w.length = len or 10
 	w.width = wid or 10
+	w.visible = false
 	
 	w.map = {}			-- this table stores all the sections of the map
 	w.points = {}		-- this table just stores points
@@ -67,13 +68,15 @@ function worldmap.init(len, wid) -- can also be used for a reset
 	end
 	
 	function w.draw()
-		for k,i in pairs(w.map) do
-			for l,j in pairs(i) do
-				w.map[k][l].draw(k, l, worldmap.sectionSize)
+		if w.visible then
+			for k,i in pairs(w.map) do
+				for l,j in pairs(i) do
+					w.map[k][l].draw(k, l, worldmap.sectionSize)
+				end
 			end
-		end
-		for k,v in pairs(w.points) do
-			v.draw()
+			for k,v in pairs(w.points) do
+				v.draw()
+			end
 		end
 	end
 	

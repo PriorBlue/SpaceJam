@@ -9,6 +9,7 @@ camera.offsetX = 0
 camera.offsetY = 0
 camera.draw = function(self)
 	love.graphics.print("scale: ".. self.scale .. "\nrotation: " .. self.rotation .. "\ntargetId: " .. ((self.target or {id="none"}).id or "NONE"))
+	love.graphics.translate(love.window.getWidth() * 0.5, love.window.getHeight() * 0.5)
 	love.graphics.scale(self.scale, self.scale)
 	--love.graphics.translate(-self.offsetX, - self.offsetY)
 	love.graphics.rotate(self.rotation)

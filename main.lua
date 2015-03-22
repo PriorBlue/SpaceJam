@@ -32,7 +32,10 @@ function love.update(dt)
 	--ships.updateInput()	
 	network.update(dt)
 	ships.update(dt)
-	camera.target = ships.ships[1]
+	
+	if ships.shipId ~= 0 then
+		camera.target = ships.ships[ships.shipId]
+	end
 	
 	-- clear events
 	event.clearAll()
