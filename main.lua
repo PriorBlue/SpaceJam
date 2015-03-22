@@ -2,6 +2,7 @@ require("src/TSerial")
 local event = require("src/events")
 local ships = require("src/spaceship")
 local network = require("src/network")
+local worldmap = require("src/worldmap")
 require("src/map")
 require("src/camera")
 
@@ -10,6 +11,7 @@ function love.load()
 	map.randomiseBodies()
 	network.init(event)
 	ships.init(event)
+	world = worldmap.init()
 end
 
 function love.update(dt)
@@ -39,6 +41,7 @@ end
 function love.draw()
 	map.draw()
 	ships.draw()
+	world.draw()
 end
 
 function resetGame()
