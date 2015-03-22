@@ -10,17 +10,18 @@ end
 
 ShipManager.keyreleased = function(key)
 	if ShipManager.shipId ~= 0 then
+	    local scode = love.keyboard.getScancodeFromKey(key)
 		local ship = ShipManager.ships[ShipManager.shipId]
 
-		if key == "w" then
+		if scode == "w" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedStop", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
-		elseif key == "s" then
+		elseif scode == "s" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedStop", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
 		end
 		
-		if key == "a" then
+		if scode == "a" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateStop", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
-		elseif key == "d" then
+		elseif scode == "d" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateStop", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
 		end
 	end
@@ -28,17 +29,18 @@ end
 
 ShipManager.keypressed = function(key)
 	if ShipManager.shipId ~= 0 then
+		local scode = love.keyboard.getScancodeFromKey(key)
 		local ship = ShipManager.ships[ShipManager.shipId]
-		
-		if key == "w" then
+
+		if scode == "w" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedUp", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
-		elseif key == "s" then
+		elseif scode == "s" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedDown", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
 		end
 		
-		if key == "a" then
+		if scode == "a" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateLeft", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
-		elseif key == "d" then
+		elseif scode == "d" then
 			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateRight", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
 		end
 	end
@@ -174,7 +176,7 @@ function CreateSpaceShip(x, y, id)
 	
 	obj.drawMarker = function(i)
 		love.graphics.setColor(0, 255, 0, 127)
-		love.graphics.rectangle("fill", love.graphics.getWidth()-256 + obj.x * 0.01 - 3, obj.y * 0.01 - 3, 5, 5)
+		love.graphics.rectangle("fill", love.graphics.getWidth()-256 + math.min(256, (math.max(0, obj.x * 0.01))) - 3, math.min(256, (math.max(0, obj.y * 0.01))) - 3, 5, 5)
 	end
 	
 	return obj
