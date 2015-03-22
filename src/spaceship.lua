@@ -12,17 +12,38 @@ ShipManager.keyreleased = function(key)
 	if ShipManager.shipId ~= 0 then
 	    local scode = love.keyboard.getScancodeFromKey(key)
 		local ship = ShipManager.ships[ShipManager.shipId]
-
+		local obj = {
+			id = ShipManager.shipId,
+			x = ship.x,
+			y = ship.y,
+			d = ship.direction,
+			s = ship.speed,
+			ds = ship.rotationSpeed,
+			ss = ship.boostSpeed,
+			sd = ship.speedTrigger,
+			dd = ship.rotationTrigger,
+			smin = ship.speedMin,
+			smax = ship.speedMax
+		}
+		
 		if scode == "w" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedStop", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
+			obj.action = "speedStop"
+			obj.sd = 0
+			ShipManager.events.push("MoveShip", obj)
 		elseif scode == "s" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedStop", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
+			obj.action = "speedStop"
+			obj.sd = 0
+			ShipManager.events.push("MoveShip", obj)
 		end
 		
 		if scode == "a" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateStop", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
+			obj.action = "rotateStop"
+			obj.dd = 0
+			ShipManager.events.push("MoveShip", obj)
 		elseif scode == "d" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateStop", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
+			obj.action = "rotateStop"
+			obj.dd = 0
+			ShipManager.events.push("MoveShip", obj)
 		end
 	end
 end
@@ -31,17 +52,42 @@ ShipManager.keypressed = function(key)
 	if ShipManager.shipId ~= 0 then
 		local scode = love.keyboard.getScancodeFromKey(key)
 		local ship = ShipManager.ships[ShipManager.shipId]
+		local obj = {
+			id = ShipManager.shipId,
+			x = ship.x,
+			y = ship.y,
+			d = ship.direction,
+			s = ship.speed,
+			ds = ship.rotationSpeed,
+			ss = ship.boostSpeed,
+			sd = ship.speedTrigger,
+			dd = ship.rotationTrigger,
+			smin = ship.speedMin,
+			smax = ship.speedMax
+		}
 
 		if scode == "w" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedUp", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
+			obj.action = "speedUp"
+			obj.sd = 1
+			ShipManager.events.push("MoveShip", obj)
 		elseif scode == "s" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "speedDown", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
+			obj.action = "speedDown"
+			obj.sd = -1
+			ShipManager.events.push("MoveShip", obj)
 		end
 		
 		if scode == "a" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateLeft", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
+			obj.action = "rotateLeft"
+			obj.dd = 1
+			ShipManager.events.push("MoveShip", obj)
 		elseif scode == "d" then
-			ShipManager.events.push("MoveShip", {id = ShipManager.shipId, action = "rotateRight", x = ship.x, y = ship.y, d = ship.direction, s = ship.speed})
+			obj.action = "rotateRight"
+			obj.dd = -1
+			ShipManager.events.push("MoveShip", obj)
+		end
+		
+		if scode == " " then
+			ShipManager.events.push("Shoot", {id = ShipManager.shipId})
 		end
 	end
 end
@@ -54,6 +100,14 @@ ShipManager.update = function(dt)
 		for i, e in pairs(events) do
 			print("create",e.x, e.y)
 			ShipManager.ships[e.id] = CreateSpaceShip(e.x, e.y, e.id)
+			ShipManager.ships[e.id].direction = e.d
+			ShipManager.ships[e.id].speed = e.s
+			ShipManager.ships[e.id].rotationSpeed = e.ds
+			ShipManager.ships[e.id].boostSpeed = e.ss
+			ShipManager.ships[e.id].speedTrigger = e.sd
+			ShipManager.ships[e.id].rotationTrigger = e.dd
+			ShipManager.ships[e.id].speedMin = e.smin
+			ShipManager.ships[e.id].speedMax = e.smax
 		end
 	end
 	
@@ -81,11 +135,19 @@ ShipManager.update = function(dt)
 
 	if events then
 		for i, e in pairs(events) do
+			print(e.id, e.smax)
 			local obj = ShipManager.ships[e.id]
 			obj.x = e.x
 			obj.y = e.y
 			obj.direction = e.d
 			obj.speed = e.s
+			obj.rotationSpeed = e.ds
+			obj.boostSpeed = e.ss
+			obj.speedTrigger = e.sd
+			obj.rotationTrigger = e.dd
+			obj.speedMin = e.smin
+			obj.speedMax = e.smax
+
 			if obj then
 				if e.action == "speedUp" then
 					obj.speedTrigger = 1
