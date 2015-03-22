@@ -120,6 +120,17 @@ ShipManager.draw = function()
 	end
 end
 
+ShipManager.drawMarker = function()
+	love.graphics.setColor(0, 0, 255, 31)
+	love.graphics.rectangle("fill", love.graphics.getWidth()-256,0,256,256)
+	if ShipManager.ships then
+		for i, s in pairs(ShipManager.ships) do
+			s.drawMarker(i)
+		end
+	end
+	love.graphics.setColor(255, 255, 255)
+end
+
 function CreateSpaceShip(x, y, id)
 	local obj = {}
 
@@ -159,6 +170,11 @@ function CreateSpaceShip(x, y, id)
 	obj.draw = function(i)
 		love.graphics.draw(obj.img, obj.x, obj.y, obj.direction, 1, 1, 16, 16)
 		--love.graphics.print(i, obj.x, obj.y)
+	end
+	
+	obj.drawMarker = function(i)
+		love.graphics.setColor(0, 255, 0, 127)
+		love.graphics.rectangle("fill", love.graphics.getWidth()-256 + obj.x * 0.01 - 3, obj.y * 0.01 - 3, 5, 5)
 	end
 	
 	return obj

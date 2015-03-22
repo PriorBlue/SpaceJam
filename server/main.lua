@@ -35,8 +35,8 @@ function love.update(dt)
 				
 				for i, p2 in pairs(player) do
 					local data = {}
-					local x = math.random(100, 200)
-					local y = math.random(100, 200)
+					local x = math.random(10000, 12000)
+					local y = math.random(10000, 12000)
 					local d = math.random(0, 10)
 					
 					data.id = "CreateShip"

@@ -44,7 +44,9 @@ end
 function love.draw()
 	map.draw()
 	ships.draw()
+	camera.reset()
 	world.draw()
+	ships.drawMarker()
 end
 
 function love.quit()
