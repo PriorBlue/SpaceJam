@@ -14,7 +14,7 @@ function love.load(args)
 		for  k,v in pairs(args) do
 			if v == "." then
 			elseif string.sub(string.lower(v),1,string.len("-ip="))=="-ip=" then
-				settings.loaded.ip = string.sub(v,string.len("-ip="))
+				settings.loaded.ip = string.sub(v,string.len("-ip=")+1)
 			end
 		end
 	end
